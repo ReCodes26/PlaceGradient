@@ -46,7 +46,7 @@ function generateLinearGradientSvg(options: GradientOptions): string {
     .join("\n");
 
   // 2. Wrap stops inside the linearGradient defs and return the full SVG string
-  return `<svg xmlns="http://w3.org" viewBox="0 0 100 100" width="${width}" height="${height}">
+  return `<svg xmlns="http://w3.org" viewBox="0 0 100 100" width="${width}" height="${height}" preserveAspectRatio="none">
   <defs>
     <linearGradient id="${id}" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}">
   ${stopElements}
