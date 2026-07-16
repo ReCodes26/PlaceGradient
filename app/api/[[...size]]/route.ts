@@ -1,5 +1,5 @@
 // app/api/[size]
-import colorNames from "colornames";
+import colorString from 'color-string';
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -15,7 +15,7 @@ const searchParamsSchema = z.object({
       (val) => {
         if (!val) return true;
         // Check if the lowercase string exists in the CSS named colors database
-        return colorNames.get(val.toLowerCase()) !== undefined;
+        return colorString.get.rgb(val.toLowerCase()) !== null;
       },
       {
         message:
