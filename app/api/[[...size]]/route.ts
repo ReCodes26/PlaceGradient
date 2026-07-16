@@ -1,44 +1,113 @@
 // app/api/[size]
-import { randomInt } from 'crypto';
-import { NextRequest } from 'next/server';
+import colorNames from "colornames";
+import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
 
 type RouteContext = {
   params: Promise<{ size?: string[] }>;
 };
 
+const searchParamsSchema = z.object({
+  color: z
+    .string()
+    .optional()
+    .refine(
+      (val) => {
+        if (!val) return true;
+        // Check if the lowercase string exists in the CSS named colors database
+        return colorNames.get(val.toLowerCase()) !== undefined;
+      },
+      {
+        message:
+          "Must be a valid CSS color name (e.g., 'blue', 'green', 'tomato')",
+      },
+    ),
+  seed: z.string().max(20).optional(),
+  theory: z.enum(["comp", "mono", "analog"]).optional(),
+});
+
+const parameterSchema = z
+  .preprocess(
+    (val) => (val === undefined ? ["400", "400"] : val),
+    z.array(z.string()),
+  )
+  // Reject anything with more than 2 elements immediately
+  .refine((strs) => strs.length >= 1 && strs.length <= 2, {
+    message:
+      "URL must contain at most 2 parameters (width and optional height)",
+  })
+  // Convert strings to integers
+  .transform((strs) => strs.map((str) => parseInt(str, 10)))
+  .refine((nums) => nums.every((num) => !isNaN(num) && Number.isInteger(num)), {
+    message: "All parameters must be valid integers",
+  })
+  // Mirror the value if it is a single number (square)
+  .transform((nums): [number, number] => {
+    if (nums.length === 1) {
+      return [nums[0], nums[0]];
+    }
+    return [nums[0], nums[1]];
+  })
+  // Enforce final tuple shape and constraints
+  .pipe(
+    z.tuple([
+      z
+        .number()
+        .int()
+        .min(1, "Width must be at least 1")
+        .max(4000, "Width cannot exceed 4000"),
+      z
+        .number()
+        .int()
+        .min(1, "Height must be at least 1")
+        .max(4000, "Height cannot exceed 4000"),
+    ]),
+  );
+
 
 export async function GET(request: NextRequest, context: RouteContext) {
-  // Await the dynamic parameters (size)
-  let { size } = await context.params;
+  try {
+    // Await the dynamic parameters (size)
+    const { size } = await context.params;
 
-  // Get the optional parameters (color, seed, theory)
-  const searchParams = request.nextUrl.searchParams;
-  const color = searchParams.get('color');
-  const seed = searchParams.get('seed');
-  const theory = searchParams.get('theory');
+    // Extract and convert search parameters to a plain object
+    const optionalParams = Object.fromEntries(
+      request.nextUrl.searchParams.entries(),
+    );
 
+    const sizeParsed = parameterSchema.safeParse(size);
+    const searchParams = searchParamsSchema.safeParse(optionalParams);
 
-  if (!size || size.length === 0) {
-    size = ["400","400"];
+    // Handle validation errors
+    if (!searchParams.success || !sizeParsed.success) {
+      return NextResponse.json(
+        {
+          error: "Invalid query parameters",
+        },
+        { status: 400 },
+      );
+    }
+
+    const [width, height] = sizeParsed.data;
+    const { color, seed, theory } = searchParams.data;
+
+    // Generate SVG here
+
+    const svg = {
+      width: width,
+      height: height,
+      color: color || "Not provided",
+      seed: seed || "Not provided",
+      theory: theory || "Not provided",
+    };
+
+    return Response.json(svg);
+
+  } catch (error) {
+    
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 },
+    );
   }
-
-   // 2. Destructure the array values
-  const [widthStr, heightStr] = size;
-  
-  const width = parseInt(widthStr, 10);
-  const height = heightStr ? parseInt(heightStr, 10) : width;
-
-  // Generate SVG here
-
-  const svg = {
-   width: width,
-   height: height,
-   color: color ?? "pink",
-   seed:  seed ? parseInt(seed, 10): randomInt(1000),
-    theory: theory ?? "Complementary"
-
-  };
-
-  // Return the data as a clean JSON response
-  return Response.json(svg);
 }
