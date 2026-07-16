@@ -96,9 +96,9 @@ export async function GET(request: NextRequest, context: RouteContext) {
     const svg = {
       width: width,
       height: height,
-      color: color || "Not provided",
-      seed: seed || "Not provided",
-      theory: theory || "Not provided",
+      color: color || "Not provided", // Select random color
+      seed: seed || "Not provided", // Select random seed
+      theory: theory || "Not provided", // Select random theory
     };
 
     return Response.json(svg);
