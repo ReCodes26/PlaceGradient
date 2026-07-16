@@ -2,6 +2,7 @@
 import colorString from 'color-string';
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import { ColorTheory } from '@/lib/colorTheoryGenerator';
 
 type RouteContext = {
   params: Promise<{ size?: string[] }>;
@@ -23,7 +24,7 @@ const searchParamsSchema = z.object({
       },
     ),
   seed: z.string().max(20).optional(),
-  theory: z.enum(["comp", "mono", "analog"]).optional(),
+  theory: z.enum(ColorTheory).optional(),
 });
 
 const parameterSchema = z

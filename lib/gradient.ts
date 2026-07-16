@@ -1,6 +1,18 @@
+import { HSL } from "./colorConversion";
+import { ColorTheory } from "./colorTheoryGenerator";
+import { NameToHSL, toCSS } from "./colorConversion";
+import {
+  generateAnalogous,
+  generateComplementary,
+  generateMonochromatic,
+} from "./colorTheoryGenerator";
+import { Colors, getRandomColor } from "./colors";
+import { createGenerator } from "./seedRandom";
+import { generateRandomNumericString } from "./randomNumberString";
+
 interface GradientStop {
   offset: string; // e.g., "0%" or "1"
-  color: string;  // e.g., "#ff0000" or "red"
+  color: string; // e.g., "#ff0000" or "red"
 }
 
 interface GradientOptions {
@@ -18,7 +30,6 @@ function generateLinearGradientSvg(options: GradientOptions): string {
   // 1. Generate the individual color stops
   const stopElements = stops
     .map((stop) => {
-
       return `    <stop offset="${stop.offset}" stop-color="${stop.color}" />`;
     })
     .join("\n");
@@ -34,20 +45,90 @@ function generateLinearGradientSvg(options: GradientOptions): string {
 </svg>`;
 }
 
+export function GenerateGradient(
+  userColorTheory?: ColorTheory,
+  mainColor?: string,
+  userSeed?: string,
+) {
+  // Fill in any defaults
+  let hslMainColor: HSL | undefined;
+  let seed: string;
+  let theory: ColorTheory;
 
-const myStops: GradientStop[] = [
-  { offset: "0%", color: "#ff7e5f" },
-  { offset: "50%", color: "#feb47b" },
-  { offset: "100%", color: "#feb47b" }
-];
+  if (!userSeed) {
+    seed = generateRandomNumericString(7); // Generate a random seed
+  } else {
+    seed = userSeed; // Use the user seed
+  }
 
-const svgString = generateLinearGradientSvg({
-  id: "sunset-gradient",
-  x1: "70%",  // Left-to-right direction
-  y1: "30%",
-  x2: "20%",
-  y2: "0%",
-  stops: myStops
-});
+  const rng = createGenerator(seed); // Setup RNG
 
-console.log(svgString);
+  if (!userColorTheory) {
+    theory = rng.pickEnum(ColorTheory); // Select random enum based on seed
+  } else {
+    theory = userColorTheory; // Use the given color theory
+  }
+
+  if (!mainColor) {
+    hslMainColor = getRandomColor(rng.next()); // Select random color
+  } else {
+    // Convert the user given color
+    hslMainColor = NameToHSL(mainColor);
+  }
+
+  if (hslMainColor === undefined)
+    // Could not find color string
+    return undefined;
+
+  // Next, find alternate colors according to the color theory
+  let colorArray: HSL[] = [];
+
+  switch (theory) {
+    case "comp":
+      colorArray = generateComplementary(hslMainColor);
+      break;
+    case "analog":
+      colorArray = generateAnalogous(hslMainColor);
+      break;
+    case "mono":
+      colorArray = generateMonochromatic(hslMainColor);
+      break;
+  }
+
+  // Generate gradients with these colors
+
+  // Determine random angles
+  const x1 = rng.rangeInt(0, 100).toString();
+  const y1 = rng.rangeInt(0, 100).toString();
+  const x2 = rng.rangeInt(0, 100).toString();
+  const y2 = rng.rangeInt(0, 100).toString();
+
+  // Determine gradient stops
+  let gradientStops: GradientStop[];
+
+  if (colorArray.length === 2) {
+    gradientStops = [
+      { offset: "0%", color: toCSS(colorArray[0]) },
+      { offset: "100%", color: toCSS(colorArray[1]) },
+    ];
+  } else {
+    gradientStops = [
+      { offset: "0%", color: toCSS(colorArray[0]) },
+      { offset: "50%", color: toCSS(colorArray[1]) },
+      { offset: "100%", color: toCSS(colorArray[2]) },
+    ];
+  }
+
+  const gradientOptions: GradientOptions = {
+    id: "place-gradient",
+    x1: x1,
+    x2: x2,
+    y1: y1,
+    y2: y2,
+    stops: gradientStops,
+  };
+
+  const gradient = generateLinearGradientSvg(gradientOptions); // Generate the gradient
+
+  return gradient;
+}

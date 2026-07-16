@@ -1,5 +1,11 @@
 import { HSL } from "./colorConversion"
 
+export enum ColorTheory {
+  Analogous = "analog",
+  Complementary = "comp",
+  Monochromatic = "mono",
+}
+
 const clampHue = (h: number): number => {
   return (h % 360 + 360) % 360;
 };
@@ -21,7 +27,7 @@ export const generateAnalogous = (base: HSL, angleOffset: number = 30): HSL[] =>
   ];
 };
 
-export const generateMonochromatic = (base: HSL, totalColors: number = 5): HSL[] => {
+export const generateMonochromatic = (base: HSL, totalColors: number = 3): HSL[] => {
   const palette: HSL[] = [];
   
   // Calculate distinct increments for lightness across the spectrum
