@@ -1,8 +1,9 @@
 // app/api/[size]
-import colorString from 'color-string';
+import colorString from "color-string";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { ColorTheory } from '@/lib/colorTheoryGenerator';
+import { ColorTheory } from "@/lib/colorTheoryGenerator";
+import { GenerateGradient } from "@/lib/gradient";
 
 type RouteContext = {
   params: Promise<{ size?: string[] }>;
@@ -65,7 +66,6 @@ const parameterSchema = z
     ]),
   );
 
-
 export async function GET(request: NextRequest, context: RouteContext) {
   try {
     // Await the dynamic parameters (size)
@@ -94,18 +94,21 @@ export async function GET(request: NextRequest, context: RouteContext) {
 
     // Generate SVG here
 
-    const svg = {
-      width: width,
-      height: height,
-      color: color || "Not provided", // Select random color
-      seed: seed || "Not provided", // Select random seed
-      theory: theory || "Not provided", // Select random theory
-    };
+    const svg = GenerateGradient(
+      width.toString(),
+      height.toString(),
+      theory,
+      color,
+      seed,
+    );
 
-    return Response.json(svg);
-
+    return new NextResponse(svg, {
+      headers: {
+        "Content-Type": "image/svg+xml",
+        "Cache-Control": "no-store, max-age=0",
+      },
+    });
   } catch (error) {
-    
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 },

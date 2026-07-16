@@ -31,11 +31,11 @@ export const generateMonochromatic = (base: HSL, totalColors: number = 3): HSL[]
   const palette: HSL[] = [];
   
   // Calculate distinct increments for lightness across the spectrum
-  const step = 80 / (totalColors - 1); 
+  const step = 40 / (totalColors - 1); 
 
   for (let i = 0; i < totalColors; i++) {
     // Distribute lightness smoothly between 10% (dark) and 90% (light)
-    const targetLightness = Math.round(10 + (i * step));
+    const targetLightness = Math.round(30 + (i * step));
     
     // Slightly lower saturation on extremely dark/light values for realistic shading
     const targetSaturation = targetLightness < 20 || targetLightness > 80 
