@@ -33,7 +33,7 @@ export function CopyText({ value, className, textClassName }: CopyTextProps) {
         className
       )}
     >
-      <p className={cn("truncate text-lg text-blue-400", textClassName)}>{value}</p>
+      <p className={cn(" text-lg text-blue-400", textClassName)}>{value}</p>
 
       <Button
         type="button"
