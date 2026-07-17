@@ -1,6 +1,8 @@
 import { CopyText } from "@/components/ui/copy-text";
 import {
   Bean,
+  Circle,
+  Dot,
   LucideCircleQuestionMark,
   PaintRollerIcon,
   Plus,
@@ -9,15 +11,13 @@ import {
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 const colorTheoryParams = [
   {
@@ -46,6 +46,9 @@ export default function Home() {
       {/* Hero */}
       <div className="py-20 w-full grid grid-cols-1 md:grid-cols-2 gap-6 max-w-[1200px] px-10 mx-auto">
         <div className="flex flex-col gap-4 my-auto">
+          <span className="flex flex-row font-bold  border-2 rounded-full py-1 px-3 w-fit border-blue-400 bg-gradient-to-r from-blue-500 via-green-500 to-yellow-500 bg-clip-text text-transparent">
+            PlaceGradient
+          </span>
           <h1 className="text-5xl font-bold">
             Simple{" "}
             <span className="bg-gradient-to-r from-blue-500 via-green-500 to-yellow-500 bg-clip-text text-transparent">
@@ -54,13 +57,15 @@ export default function Home() {
             Placeholder Image API
           </h1>
           <h2 className="text-xl font-light tracking-wide">
-            Lorem ipsum dolar sit amet.
+            Generate beautiful SVG gradient placeholder images instantly with a
+            simple, free API. Perfect for web development, UI mockups,
+            prototypes, and responsive applications.
           </h2>
         </div>
         <img
           src="/api?color=DodgerBlue"
           alt="Placeholder Gradient"
-          className="w-full h-90 rounded-xl shadow-black/20 shadow-xl"
+          className="w-full h-90 rounded-xl shadow-black/20 shadow-xl transition-transform duration-300 hover:scale-102"
         />
       </div>
 
@@ -68,19 +73,19 @@ export default function Home() {
       <div className="w-full bg-zinc-200 ">
         <div className="py-20 w-full flex flex-col gap-6 justify-center items-center max-w-[1200px] px-10 mx-auto">
           <h2 className="text-center text-3xl font-bold">
-            Easily Generate Placeholder Gradient SVG's
+            Easily Generate Placeholder SVG Gradient
           </h2>
-          <p className="text-lg font-light tracking-wide text-center">
-            Use the URL to get a random gradient SVG with a default size of
+          <p className="font-light text-center">
+            Use the URL to get a random SVG gradient with a default size of
             400x400.
           </p>
-          <div className="w-full md:max-w-xl">
+          <div className="w-full max-w-[70%]">
             <CopyText value="http://localhost:3000/api" />
           </div>
-          <p className="text-lg font-light tracking-wide text-center">
+          <p className="font-light text-center">
             To get a specified size, just add width and height to the URL.
           </p>
-          <div className="w-full md:max-w-xl flex flex-col">
+          <div className="w-full max-w-[70%] flex flex-col">
             <CopyText value="http://localhost:3000/api/600" />
             <div className="relative flex py-3 items-center w-full">
               <div className="flex-grow border-t border-slate-500" />
@@ -99,7 +104,7 @@ export default function Home() {
         <img
           src="/api?color=DarkMagenta"
           alt="Placeholder Gradient"
-          className="w-full h-90 rounded-xl shadow-black/20 shadow-xl"
+          className="w-full h-90 rounded-xl shadow-black/20 shadow-xl transition-transform duration-300 hover:scale-102"
         />
         <div className="flex flex-col gap-4 my-auto">
           <PaintRollerIcon size={30} />
@@ -147,7 +152,7 @@ export default function Home() {
         <img
           src="/api?seed=hello"
           alt="Placeholder Gradient"
-          className="w-full h-90 rounded-xl shadow-black/20 shadow-xl"
+          className="w-full h-90 rounded-xl shadow-black/20 shadow-xl transition-transform duration-300 hover:scale-102"
         />
       </div>
 
@@ -156,7 +161,7 @@ export default function Home() {
         <img
           src="/api?theory=comp"
           alt="Placeholder Gradient"
-          className="w-full h-90 rounded-xl shadow-black/20 shadow-xl"
+          className="w-full h-90 rounded-xl shadow-black/20 shadow-xl transition-transform duration-300 hover:scale-102"
         />
 
         <div className="flex flex-col gap-4 my-auto">
@@ -219,7 +224,7 @@ export default function Home() {
         <img
           src="/api/400/200?theory=analog&color=MediumSlateBlue&seed=happy"
           alt="Placeholder Gradient"
-          className="w-full h-90 rounded-xl shadow-black/20 shadow-xl"
+          className="w-full h-90 rounded-xl shadow-black/20 shadow-xl transition-transform duration-300 hover:scale-102"
         />
       </div>
 
@@ -260,16 +265,49 @@ export default function Home() {
             <br />
             If PlaceGradient helped you, show support by ⭐ starring the project
             on GitHub and sharing the tools with others. Thank you for using
-            PlaceGradients!
+            PlaceGradient!
           </p>
-          <Button className="w-fit">View on Github</Button>
+
+          <a
+            href="https://github.com/ReCodes26/PlaceGradient"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={cn(
+              buttonVariants({ variant: "default", size: "default" }),
+              "w-fit",
+            )}
+          >
+            View on GitHub
+          </a>
         </div>
       </div>
       <footer className="w-full border-t border-zinc-300 bg-zinc-200 backdrop-blur">
-      <div className="min-h-20 px-10 mx-auto items-center max-w-[1200px] flex-row flex justify-between">
-        <p className="text-zinc-500">🩶 Created By <a href="" className="underline text-zinc-700">Ariana</a> (ReCodes26)</p>
-        <img width={20} height={20} src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg" />
-      </div>
+        <div className="min-h-20 px-10 mx-auto items-center max-w-[1200px] flex-row flex justify-between">
+          <p className="text-zinc-500">
+            🩶 Created By{" "}
+            <a
+              rel="noopener"
+              target="_blank"
+              href="https://recodes26.dev/"
+              className="underline text-zinc-700"
+            >
+              Ariana
+            </a>{" "}
+            (ReCodes26)
+          </p>
+          <a
+            className="transition-transform duration-300 hover:scale-110"
+            href="https://github.com/ReCodes26/PlaceGradient"
+            target="_blank"
+            rel="noopener"
+          >
+            <img
+              width={20}
+              height={20}
+              src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg"
+            />
+          </a>
+        </div>
       </footer>
     </div>
   );
