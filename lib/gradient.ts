@@ -59,22 +59,16 @@ function generateLinearGradientSvg(options: GradientOptions): string {
 export function GenerateGradient(
   width: string,
   height: string,
+  userSeed: string,
   userColorTheory?: ColorTheory,
   mainColor?: string,
-  userSeed?: string,
 ) {
   // Fill in any defaults
   let hslMainColor: HSL | undefined;
   let seed: string;
   let theory: ColorTheory;
 
-  if (!userSeed) {
-    seed = generateRandomNumericString(7); // Generate a random seed
-  } else {
-    seed = userSeed; // Use the user seed
-  }
-
-  const rng = createGenerator(seed); // Setup RNG
+  const rng = createGenerator(userSeed); // Setup RNG
 
   if (!userColorTheory) {
     theory = rng.pickEnum(ColorTheory); // Select random enum based on seed

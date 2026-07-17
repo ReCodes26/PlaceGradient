@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { ColorTheory } from "@/lib/colorTheoryGenerator";
 import { GenerateGradient } from "@/lib/gradient";
+import { generateRandomNumericString } from "@/lib/randomNumberString";
 
 type RouteContext = {
   params: Promise<{ size?: string[] }>;
@@ -92,20 +93,39 @@ export async function GET(request: NextRequest, context: RouteContext) {
     const [width, height] = sizeParsed.data;
     const { color, seed, theory } = searchParams.data;
 
-    // Generate SVG here
+    if (!seed) {
+      const randomSeed = generateRandomNumericString(7); // generate new random seed
 
+      // Construct the new URL containing the seed
+      const redirectUrl = new URL(request.url);
+      redirectUrl.searchParams.set("seed", randomSeed);
+
+      // Redirect the browser. Tell CDNs NOT to cache this redirect.
+      return NextResponse.redirect(redirectUrl, {
+        status: 307, // 307 Temporary Redirect.
+        headers: {
+          "Cache-Control":
+            "private, no-cache, no-store, max-age=0, must-revalidate",
+        },
+      });
+    }
+
+    // Generate SVG 
     const svg = GenerateGradient(
       width.toString(),
       height.toString(),
+      seed,
       theory,
       color,
-      seed,
     );
 
     return new NextResponse(svg, {
       headers: {
         "Content-Type": "image/svg+xml",
-        "Cache-Control": "no-store, max-age=0",
+        "Cache-Control":
+          "public, max-age=31536000, s-maxage=31536000, immutable",
+        "Content-Security-Policy":
+          "default-src 'none'; style-src 'unsafe-inline';",
       },
     });
   } catch (error) {
