@@ -23,19 +23,19 @@ const colorTheoryParams = [
   {
     theory: "Complementary",
     parameter: "comp",
-    usage: "http://localhost:3000/api?theory=comp",
+    usage: "https://placegradient.recodes26.dev/api?theory=comp",
     description: "Opposite colors; high contrast.",
   },
   {
     theory: "Monochromatic",
     parameter: "mono",
-    usage: "http://localhost:3000/api?theory=mono",
+    usage: "https://placegradient.recodes26.dev/api?theory=mono",
     description: "One color; varying shades",
   },
   {
     theory: "Analogous",
     parameter: "analog",
-    usage: "http://localhost:3000/api?theory=analog",
+    usage: "https://placegradient.recodes26.dev/api?theory=analog",
     description: "Neighboring colors; smooth harmony.",
   },
 ];
@@ -80,13 +80,13 @@ export default function Home() {
             400x400.
           </p>
           <div className="w-full max-w-[70%]">
-            <CopyText value="http://localhost:3000/api" />
+            <CopyText value="https://placegradient.recodes26.dev/api" />
           </div>
           <p className="font-light text-center">
             To get a specified size, just add width and height to the URL.
           </p>
           <div className="w-full max-w-[70%] flex flex-col">
-            <CopyText value="http://localhost:3000/api/600" />
+            <CopyText value="https://placegradient.recodes26.dev/api/600" />
             <div className="relative flex py-3 items-center w-full">
               <div className="flex-grow border-t border-slate-500" />
               <span className="flex-shrink mx-4 text-muted-foreground text-sm uppercase tracking-wider">
@@ -94,7 +94,7 @@ export default function Home() {
               </span>
               <div className="flex-grow border-t border-slate-500" />
             </div>
-            <CopyText value="http://localhost:3000/api/600/400" />
+            <CopyText value="https://placegradient.recodes26.dev/api/600/400" />
           </div>
         </div>
       </div>
@@ -129,7 +129,7 @@ export default function Home() {
             colors will not work.
           </p>
           <div className="w-full md:max-w-xl">
-            <CopyText value="http://localhost:3000/api?color=DarkMagenta" />
+            <CopyText value="https://placegradient.recodes26.dev/api?color=DarkMagenta" />
           </div>
         </div>
       </div>
@@ -146,7 +146,7 @@ export default function Home() {
             20 characters long.
           </p>
           <div className="w-full md:max-w-xl">
-            <CopyText value="http://localhost:3000/api?seed=hello" />
+            <CopyText value="https://placegradient.recodes26.dev/api?seed=hello" />
           </div>
         </div>
         <img
@@ -175,7 +175,7 @@ export default function Home() {
             gradient. The acceptable parameter values are listed below.
           </p>
           <div className="w-full md:max-w-xl">
-            <CopyText value="http://localhost:3000/api?theory=comp" />
+            <CopyText value="https://placegradient.recodes26.dev/api?theory=comp" />
           </div>
           <Table>
             <TableHeader>
@@ -217,7 +217,7 @@ export default function Home() {
             and value.
           </p>
           <div className="w-full md:max-w-xl">
-            <CopyText value="http://localhost:3000/api/400/200?theory=analog&color=MediumSlateBlue&seed=happy" />
+            <CopyText value="https://placegradient.recodes26.dev/api/400/200?theory=analog&color=MediumSlateBlue&seed=happy" />
           </div>
         </div>
 
