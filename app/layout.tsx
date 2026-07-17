@@ -21,7 +21,8 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://placegradient.recodes26.dev'),
   title: "PlaceGradient API — Generate SVG Gradient Images",
   description: "Generate customizable SVG gradient placeholder images with a free API. Perfect for web development, UI mockups, prototypes, and modern applications.",
-openGraph: {
+keywords: ["Placeholder Image","Gradient","SVG maker", "SVG Gradient", "Developer tool", "Free Image API", "Gradient Generator", "Placeholder API", "Image generator"],
+  openGraph: {
     title: 'PlaceGradient API',
     description: 'Generate customizable SVG placeholder gradients instantly.',
     url: 'https://placegradient.recodes26.dev',
